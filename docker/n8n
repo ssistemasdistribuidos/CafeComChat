@@ -1,0 +1,98 @@
+version: "3.7"
+
+services:
+  n8n_editor:
+    image: n8nio/n8n:latest
+    command: start
+    networks:
+      - sd
+    environment:
+      - N8N_FIX_MIGRATIONS=true 
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_DATABASE=n8n_queue
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_USER=postgres
+      - DB_POSTGRESDB_PASSWORD=60307eee918bbc760153b5f004da4685
+      - N8N_ENCRYPTION_KEY=4e55c2114aa03f50aa4c9e6c15aed305
+      - N8N_HOST=n8n.gustavofilho.com.br
+      - N8N_EDITOR_BASE_URL=https://n8n.gustavofilho.com.br/
+      - WEBHOOK_URL=https://webhook.gustavofilho.com.br/
+      - N8N_PROTOCOL=https
+      - N8N_ONBOARDING_FLOW_DISABLED=true
+      - NODE_ENV=production
+      - EXECUTIONS_MODE=queue
+      - EXECUTIONS_TIMEOUT=3600
+      - EXECUTIONS_TIMEOUT_MAX=7200
+      - OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=true
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_RUNNERS_MODE=internal
+      - N8N_RUNNERS_MAX_CONCURRENCY=5
+      - N8N_REINSTALL_MISSING_PACKAGES=true
+      - N8N_COMMUNITY_PACKAGES_ENABLED=true
+      - N8N_NODE_PATH=/home/node/.n8n/nodes
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+      - QUEUE_BULL_REDIS_HOST=n8n_redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - QUEUE_BULL_REDIS_DB=1
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=336
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.n8n_editor.rule=Host(`n8n.gustavofilho.com.br`)
+        - traefik.http.routers.n8n_editor.entrypoints=websecure
+        - traefik.http.routers.n8n_editor.tls.certresolver=letsencryptresolver
+        - traefik.http.services.n8n_editor.loadbalancer.server.port=5678
+
+  n8n_webhook:
+    image: n8nio/n8n:latest
+    command: webhook
+    networks:
+      - sd
+    environment:
+      <<mesmo bloco de variáveis do editor>>
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.n8n_webhook.rule=(Host(`webhook.gustavofilho.com.br`) && PathPrefix(`/webhook`))
+        - traefik.http.routers.n8n_webhook.entrypoints=websecure
+        - traefik.http.routers.n8n_webhook.tls.certresolver=letsencryptresolver
+        - traefik.http.services.n8n_webhook.loadbalancer.server.port=5678
+
+  n8n_worker:
+    image: n8nio/n8n:latest
+    command: worker --concurrency=10
+    networks:
+      - sd
+    environment:
+      <<mesmo bloco de variáveis do editor>>
+
+  n8n_redis:
+    image: redis:latest
+    command: ["redis-server", "--appendonly", "yes", "--port", "6379"]
+    volumes:
+      - n8n_redis:/data
+    networks:
+      - sd
+
+volumes:
+  n8n_redis:
+    external: true
+    name: n8n_redis
+
+networks:
+  sd:
+    external: true
+    name: sd
