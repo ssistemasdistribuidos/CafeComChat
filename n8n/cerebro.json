@@ -1,0 +1,374 @@
+{
+  "name": "Cérebro",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "id": "81626751-5b1d-4871-8748-8ef1948b1d92",
+      "name": "Baixar Áudio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "faf55589-fdd4-4623-abf5-4da525550417",
+      "credentials": {
+        "telegramApi": {
+          "id": "6fhzs5DyV6byTYUx",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "3",
+        "contextWindowLength": 50
+      },
+      "id": "6518598b-73fa-49cf-9140-e387c3a08b40",
+      "name": "Simple Memory1",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        160
+      ],
+      "id": "ff58e9a3-18e8-4830-b407-92a0d5265e01",
+      "name": "Send a text message",
+      "webhookId": "17a7f7c7-395b-481a-b718-e12605785f05",
+      "credentials": {
+        "telegramApi": {
+          "id": "6fhzs5DyV6byTYUx",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice?.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "ecc4e54a-9118-4bec-95e0-99970418dfb2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "272cc5b8-02c7-4586-8b1b-781b1fc37cab",
+                    "leftValue": "={{ $json.message.text || '' }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -256,
+        128
+      ],
+      "id": "08f6acba-c2fa-4fda-8b2f-1e39b8836df0",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://webhook.gustavofilho.com.br/mcp/a6d0a77c-bec0-48d4-9217-f31b5d10ecda",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        656,
+        544
+      ],
+      "id": "52a59b78-fbc7-4bb2-b060-bb11e61ef527",
+      "name": "MCP Cafeicultura"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        384
+      ],
+      "id": "1e262f84-b08a-4210-b292-a62ed252b49c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "u2rUPIlcAzonmmIG",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -432,
+        128
+      ],
+      "id": "e2dc5552-a9b3-4f74-b265-c9cc984ec539",
+      "name": "Telegram Trigger",
+      "webhookId": "79d04c60-d789-4437-8bbf-5e0ccf0e386e",
+      "credentials": {
+        "telegramApi": {
+          "id": "6fhzs5DyV6byTYUx",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você é Salgadinho, assistente científico virtual do NECAF – Núcleo de Estudos em Cafeicultura da UFLA.\n\nSua função é responder dúvidas sobre:\n- relação entre solo e produtividade do café arábica;\n- uso de resíduos do processamento do café;\n- doenças do cafeeiro.\n\nUse SEMPRE a ferramenta MCP Cafeicultura para buscar informações nos documentos internos antes de responder.  \nSó use conhecimento geral se a ferramenta não retornar nada relevante — e deixe isso claro.\n\nRegras:\n- respostas claras, curtas e em tom semi-formal;\n- sem inventar dados ou dar doses de agroquímicos;\n- se a pergunta for ampla, peça foco;\n- saudação curta apenas quando o usuário inicia a conversa.\n\n{{ $json.message.text }}\n{{ $json.data }}\n\nAgora responda usando primeiro os resultados da ferramenta MCP (se houver).",
+        "options": {}
+      },
+      "id": "8d863bdd-3b24-475a-b1bd-df2230cf443c",
+      "name": "Salgadinho",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://34.39.191.213:8000/asr?task=transcribe",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "audio_file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        240,
+        0
+      ],
+      "id": "e7164c1a-704b-47dc-b4f5-ef4860536668",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 752137656,
+          "message": {
+            "message_id": 43,
+            "from": {
+              "id": 1311778252,
+              "is_bot": false,
+              "first_name": "GutoHits",
+              "language_code": "pt-br"
+            },
+            "chat": {
+              "id": 1311778252,
+              "first_name": "GutoHits",
+              "type": "private"
+            },
+            "date": 1763997454,
+            "voice": {
+              "duration": 4,
+              "mime_type": "audio/ogg",
+              "file_id": "AwACAgEAAxkBAAMraSR3Dur8EHIwnqffXdquLJLR9k0AAucIAAJ4IyBFwA28VKV6O0Y2BA",
+              "file_unique_id": "AgAD5wgAAngjIEU",
+              "file_size": 19727
+            }
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Baixar Áudio": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Salgadinho",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Baixar Áudio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salgadinho",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Cafeicultura": {
+      "ai_tool": [
+        [
+          {
+            "node": "Salgadinho",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Salgadinho",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salgadinho": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Salgadinho",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "62ae6ea0-0005-4620-ad88-d6036262c18e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc1cfc96cbdf707f05ece588c41578ef545445c4225ac708d45c40a8488c16e0"
+  },
+  "id": "BSSiatlxbMlk0CBw",
+  "tags": []
+}
