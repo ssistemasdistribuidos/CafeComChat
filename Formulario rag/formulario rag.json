@@ -1,0 +1,177 @@
+{
+  "name": "formulario rag",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "cafesd",
+          "mode": "list",
+          "cachedResultName": "cafesd"
+        },
+        "embeddingBatchSize": 1536,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        976,
+        -192
+      ],
+      "id": "421f4f54-a41b-4c88-8714-51574ae973a2",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "k5v4YGT6kFZZ1zcy",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        208
+      ],
+      "id": "3b5aa001-116a-4598-b357-d659d215fd09",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "u2rUPIlcAzonmmIG",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        1088,
+        32
+      ],
+      "id": "c8ae0fab-f860-4da1-af73-aadc7a5db650",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 250,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        208
+      ],
+      "id": "25688af8-501f-40de-9a57-7028c30f9a41",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "formTitle": "Vetorizar arquivos",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Arquivo",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        800,
+        -192
+      ],
+      "id": "bb0b201e-3a88-4424-b12c-c2ddae76d5fb",
+      "name": "On form submission",
+      "webhookId": "64d755ef-5737-4672-8129-6320a73aa0fe"
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Arquivo": [
+            {
+              "filename": "Relação entre o solo e a produtividade do café arábica.pdf",
+              "mimetype": "application/pdf",
+              "size": 1432183
+            }
+          ],
+          "submittedAt": "2025-11-12T21:22:08.540-03:00",
+          "formMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f9d57483-45a0-4dc3-a1d5-298fd4a2751e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc1cfc96cbdf707f05ece588c41578ef545445c4225ac708d45c40a8488c16e0"
+  },
+  "id": "0XnWpZx3TsZjCDE0",
+  "tags": []
+}
