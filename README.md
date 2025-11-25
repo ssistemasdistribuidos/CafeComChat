@@ -37,7 +37,7 @@ Desenvolver um sistema conversacional baseado em **Inteligência Artificial Dist
 ### Objetivos Específicos
 - Integrar o **Telegram** como interface de consulta (texto e voz);
 - Implementar serviço de **transcrição de áudio** (API OpenAI ou Whisper local);
-- Executar o **modelo de linguagem Ollama (LLM)** localmente, garantindo **privacidade e soberania de dados**;
+- Executar o **modelo de linguagem Whisper (Open AI)** localmente, garantindo **privacidade e soberania de dados**;
 - Criar uma base **RAG (Retrieval-Augmented Generation)** com artigos e relatórios do NECAF;
 - Integrar os módulos em um **fluxo distribuído e assíncrono**;
 - Validar a **eficácia e precisão** das respostas do sistema.
@@ -58,7 +58,7 @@ O sistema é composto por **serviços independentes** que se comunicam via **API
 - **OpenAI Whisper API** → transcrição de voz (opcional).
 
 **Serviços Internos (On-Premise):**
-- **Ollama LLM** → processamento local de linguagem natural;
+- **Whisper Local** → processamento local de linguagem natural;
 - **Base RAG** → artigos e relatórios técnicos vetorizados.
 
 🧱 *Benefício:* modularidade — qualquer serviço pode ser substituído sem afetar o restante do sistema.
@@ -95,7 +95,7 @@ O sistema foi avaliado sob o modelo **STRIDE**, e as principais **15 ameaças** 
 | 7 | Information Disclosure | Vazamento de áudios sensíveis para API externa. | Alta | Alto | Alto | Substituir API externa por Whisper local. | Baixa | Alto | Médio |
 | 8 | Information Disclosure | Exposição de chaves de API em ambientes inseguros. | Médio | Alto | Alto | Uso de Vault/Docker Secrets e rotação de chaves. | Baixa | Alto | Médio |
 | 9 | Information Disclosure | Vazamento de dados de pesquisa via container comprometido. | Médio | Alto | Alto | Criptografia e isolamento de containers. | Baixa | Alto | Médio |
-| 10 | Denial of Service | Sobrecarga de consultas no Ollama. | Alta | Alto | Alto | Rate limiting e fila de processamento. | Médio | Alto | Médio |
+| 10 | Denial of Service | Sobrecarga de consultas no Whisper que roda local. | Alta | Alto | Alto | Rate limiting e fila de processamento. | Médio | Alto | Médio |
 | 11 | Denial of Service | Falha ou lentidão na API de transcrição. | Médio | Médio | Médio | Retries e circuit breaker. | Baixa | Médio | Baixo |
 | 12 | Elevation of Privilege | Execução remota de código dentro do container. | Baixa | Muito Alto | Alto | Rodar como non-root e manter patches atualizados. | Muito Baixa | Alto | Médio |
 | 13 | Elevation of Privilege | Acesso indevido à rede interna via container. | Médio | Alto | Alto | Segmentação de rede e isolamento de containers. | Baixa | Alto | Médio |
@@ -118,7 +118,6 @@ O sistema foi avaliado sob o modelo **STRIDE**, e as principais **15 ameaças** 
 |-------------|-------------|
 | Chatbot | [Telegram Bot API](https://core.telegram.org/bots/api) |
 | Transcrição de Áudio | [OpenAI Whisper](https://platform.openai.com/docs/guides/speech-to-text) *(ou local)* |
-| LLM Local | [Ollama](https://ollama.ai/) |
 | Base de Conhecimento | RAG (vetorização + embeddings) |
 | Backend | Node.js / Python |
 | Infraestrutura | Docker Compose / Rede isolada |
