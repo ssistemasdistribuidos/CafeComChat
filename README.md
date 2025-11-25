@@ -117,7 +117,7 @@ O sistema foi avaliado sob o modelo **STRIDE**, e as principais **15 ameaças** 
 | Componente | Tecnologia |
 |-------------|-------------|
 | Chatbot | [Telegram Bot API](https://core.telegram.org/bots/api) |
-| Transcrição de Áudio | [OpenAI Whisper](https://platform.openai.com/docs/guides/speech-to-text) *(ou local)* |
+| Transcrição de Áudio | [OpenAI Whisper](https://platform.openai.com/docs/guides/speech-to-text)|
 | Base de Conhecimento | RAG (vetorização + embeddings) |
 | Backend | Node.js / Python |
 | Infraestrutura | Docker Compose / Rede isolada |
