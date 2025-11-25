@@ -129,10 +129,10 @@ O sistema foi avaliado sob o modelo **STRIDE**, e as principais **15 ameaças** 
 
 | Nome | Função |
 |------|---------|
-| **Caio César da Rocha** | Desenvolvimento e Integração de Serviços |
-| **Gustavo Henrique Moraes Filho** | Modelagem de Ameaças e Segurança |
-| **João Victor Vieira Neto Matos** | Arquitetura de Sistema e Documentação |
-| **Mateus Henrique Teixeira** | Estrutura e Implementação do Backend |
+| **Caio César da Rocha** | Modelagem de Ameaças e Segurança // Desenvolvimento e Integração de serviços // OpenAI Whisper |
+| **Gustavo Henrique Moraes Filho** | Modelagem de Ameaças e Segurança // Desenvolvimento e Integração de serviços // Telegram e MCP|
+| **João Victor Vieira Neto Matos** | Documentação  // Desenvolvimento e Integração de serviços // ChatGPT |
+| **Mateus Henrique Teixeira** | Documentação // Desenvolvimento e Integração de serviços // RAG |
 
 📍 *Universidade Federal de Lavras (UFLA)* – 2025  
 📘 Disciplina: **GCC129 – Sistemas Distribuídos**
