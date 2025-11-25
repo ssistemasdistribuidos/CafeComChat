@@ -139,8 +139,33 @@ O sistema foi avaliado sob o modelo **STRIDE**, e as principais **15 ameaças** 
 
 ---
 
+## 🔄 Fluxo de Serviços (n8n)
+
+A seguir está o diagrama do fluxo implementado no n8n, responsável por orquestrar a recepção das mensagens, transcrição e consulta ao modelo de IA.
+
+### 🔹 Fluxo Geral de Atendimento com resposta (Texto + Áudio)
+
+<p align="center">
+  <img src="imgs/cerebro.png" width="850">
+</p>
+
+### 🔹 Fluxo para inclusão de novos arquivos para a base de dados vetorial
+
+<p align="center">
+  <img src="imgs/formulario.png" width="850">
+</p>
+
+### 🔹 Fluxo para consulta do RAG pelo ChatGPT
+
+<p align="center">
+  <img src="imgs/rag.png" width="850">
+</p>
+
+---
+
 ## 📜 Licença
 
 Este projeto é de uso acadêmico e educacional, podendo ser adaptado para fins de pesquisa e extensão.
 
 ---
+
