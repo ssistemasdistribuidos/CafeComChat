@@ -55,10 +55,10 @@ O sistema é composto por **serviços independentes** que se comunicam via **API
 
 **Serviços Externos (Cloud):**
 - **Telegram Bot API** → interface com o usuário;
-- **OpenAI Whisper API** → transcrição de voz (opcional).
+- **Chat GPT** → processamento de linguagem natural.
 
 **Serviços Internos (On-Premise):**
-- **Whisper Local** → processamento local de linguagem natural;
+- **OpenAI Whisper** → trascrição de áudios;
 - **Base RAG** → artigos e relatórios técnicos vetorizados.
 
 🧱 *Benefício:* modularidade — qualquer serviço pode ser substituído sem afetar o restante do sistema.
