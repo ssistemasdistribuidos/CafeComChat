@@ -143,7 +143,13 @@ O sistema foi avaliado sob o modelo **STRIDE**, e as principais **15 ameaças** 
 
 A seguir está o diagrama do fluxo implementado no n8n, responsável por orquestrar a recepção das mensagens, transcrição e consulta ao modelo de IA.
 
-### 🔹 Fluxo Geral de Atendimento com resposta (Texto + Áudio)
+### 🔹 Fluxo Inicial de Atendimento com resposta (Texto + Áudio)
+
+<p align="center">
+  <img src="imgs/versao_inicial.jpeg" width="850">
+</p>
+
+### 🔹 Fluxo Final de Atendimento com resposta (Texto + Áudio)
 
 <p align="center">
   <img src="imgs/cerebro.png" width="850">
